@@ -18,6 +18,10 @@ class PlayerFactory extends Factory
         return [
             'name' => $name,
             'skill' => $this->faker->numberBetween(0,100),
+            'good_look' => $this->faker->numberBetween(0,100),
+            'travel_speed' => $this->faker->numberBetween(0,100),
+            'reaction_time' => $this->faker->numberBetween(0,100),
+            'strengh' => $this->faker->numberBetween(0,100),
             'type' => $gender
         ];
     }
