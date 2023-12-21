@@ -9,8 +9,8 @@ class Tournament extends Model
 {
     use HasFactory;
 
-    public function players()
+    public function matches()
     {
-        return $this->hasMany(Player::class);
+        return $this->hasMany(Matches::class);
     }
 }

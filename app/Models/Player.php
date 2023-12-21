@@ -9,8 +9,18 @@ class Player extends Model
 {
     use HasFactory;
 
-    public function tournaments()
+    public function matchesPlayer1()
     {
-        return $this->belongsToMany(Tournament::class);
+        return $this->hasMany(Matches::class,'player_1_id');
+    }
+
+    public function matchesPlayer2()
+    {
+        return $this->hasMany(Matches::class,'player_2_id');
+    }
+
+    public function winner()
+    {
+        return $this->hasMany(Matches::class,'player_win_id');
     }
 }
