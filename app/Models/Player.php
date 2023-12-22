@@ -9,6 +9,8 @@ class Player extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id' , 'created_at' , 'updated_at'];
+
     public function matchesPlayer1()
     {
         return $this->hasMany(Matches::class,'player_1_id');

@@ -15,13 +15,16 @@ class PlayerFactory extends Factory
     {
         $gender = $this->faker->randomElement([1,2]);
         $name = ($gender == 1)? $this->faker->name('male') : $this->faker->name('female');
+        $reactionTime = ($gender == 1)? null : $this->faker->numberBetween(0,100);
+        $travelSpeed = $strengh = ($gender == 1)? $this->faker->numberBetween(0,100) : null ;
+        
         return [
             'name' => $name,
             'skill' => $this->faker->numberBetween(0,100),
             'good_look' => $this->faker->numberBetween(0,100),
-            'travel_speed' => $this->faker->numberBetween(0,100),
-            'reaction_time' => $this->faker->numberBetween(0,100),
-            'strengh' => $this->faker->numberBetween(0,100),
+            'travel_speed' => $travelSpeed,
+            'reaction_time' => $reactionTime,
+            'strengh' => $strengh,
             'type' => $gender
         ];
     }
