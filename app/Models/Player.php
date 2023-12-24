@@ -25,4 +25,9 @@ class Player extends Model
     {
         return $this->hasMany(Matches::class,'player_win_id');
     }
+
+    public function tournaments()
+    {
+        return $this->hasMany(Tournament::class , 'champion_id');
+    }
 }

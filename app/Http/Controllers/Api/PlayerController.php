@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\PlayerNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Player;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
@@ -20,7 +22,7 @@ class PlayerController extends Controller
             $players = Player::all();
 
             if(!$players->count()){
-                throw new PlayerNotFoundException("Sorry! There are not players registered yet.");
+                throw new PlayerNotFoundException("Sorry! There ared not players registered yet.");
             }
 
             return response()->json(
@@ -28,6 +30,11 @@ class PlayerController extends Controller
                 200
             );
         }catch(Exception $e){
+            return response()->json(
+                ["message" => $e->getMessage()],
+                404
+            );
+        }catch(PlayerNotFoundException $e){
             return response()->json(
                 ["message" => $e->getMessage()],
                 404
@@ -67,7 +74,19 @@ class PlayerController extends Controller
      */
     public function show($id)
     {
-        //
+        try{
+            $player = Player::withCount('tournaments')->findOrFail($id)->toArray();
+
+            return response()->json(
+                $player,
+                200
+            );
+        }catch(ModelNotFoundException $e){
+            return response()->json(
+                ["message" => "Sorry! We couldn't find the player you're looking for."],
+                404
+            );
+        }
     }
 
     /**
