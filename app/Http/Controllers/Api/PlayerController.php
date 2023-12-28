@@ -51,9 +51,8 @@ class PlayerController extends Controller
     public function store(Request $request)
     {
         try{
-            $player = Player::create($request->all());
+            Player::create($request->all());
 
-            $player->save();
             return response()->json(
                 ["message" => "Success! The player was registered."],
                 201
