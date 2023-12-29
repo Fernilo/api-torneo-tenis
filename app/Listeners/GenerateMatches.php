@@ -28,15 +28,33 @@ class GenerateMatches
      * @return void
      */
     public function handle(TournamentCreated $event)
-    {dd($event->tournament);
-        $match = new Matches();
-        $idsAleatorios = Player::inRandomOrder()->take($event->tournament->total_player)->pluck('id')->toArray();
-        $items = Arr::random($idsAleatorios, 2);
-        $match->player_1_id = $idsAleatorios[0];
-        $match->player_2_id = $idsAleatorios[1];
-        $match->tournament_id = $event->tournament->id;
-        $match->match_day = now();
-        $match->save();
-        dd($items);
+    {
+        $idsArray = [];
+        $count = 1;
+        do {
+            $idPlayer1 = $this->getRandomPlayerId();
+            $idPlayer2 = $this->getRandomPlayerId();
+            if($idPlayer1 != $idPlayer2 && !isset($idsArray[$idPlayer1]) && !isset($idsArray[$idPlayer2])) {
+                $match = new Matches();
+                $idsArray[] = $idPlayer1;
+                $idsArray[] = $idPlayer2;
+                
+                $match->fill([
+                    'player_1_id' => $idPlayer1,
+                    'player_2_id' => $idPlayer2,
+                    'tournament_id' => $event->tournament->id,
+                    'match_day' => now()->addDay(),
+                ]);
+        
+                $match->save();
+                $count++;
+            }
+        } while ($count <= ($event->tournament->total_player/2));
+        
+    }
+
+    private function getRandomPlayerId() 
+    {
+        return Player::inRandomOrder()->take(1)->pluck('id')->first();
     }
 }
