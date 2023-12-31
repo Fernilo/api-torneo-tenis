@@ -32,8 +32,8 @@ class GenerateMatches
         $idsArray = [];
         $count = 1;
         do {
-            $idPlayer1 = $this->getRandomPlayerId();
-            $idPlayer2 = $this->getRandomPlayerId();
+            $idPlayer1 = Player::getRandomPlayerId();
+            $idPlayer2 = Player::getRandomPlayerId();
             if($idPlayer1 != $idPlayer2 && !isset($idsArray[$idPlayer1]) && !isset($idsArray[$idPlayer2])) {
                 $match = new Matches();
                 $idsArray[] = $idPlayer1;
@@ -51,10 +51,5 @@ class GenerateMatches
             }
         } while ($count <= ($event->tournament->total_player/2));
         
-    }
-
-    private function getRandomPlayerId() 
-    {
-        return Player::inRandomOrder()->take(1)->pluck('id')->first();
     }
 }

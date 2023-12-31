@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\DeletedPlayer;
 use App\Exceptions\PlayerNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Player;
@@ -89,29 +90,6 @@ class PlayerController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -119,6 +97,22 @@ class PlayerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $player = Player::findOrFail($id);
+            
+            $player->delete();
+            
+            DeletedPlayer::dispatch($player);
+          
+            return response()->json(
+                ['message' => 'Success! The player was deleted and replaced with another.'],
+                200
+            );
+        }catch(Exception $e){
+            return response()->json(
+                ["message" => $e->getMessage()],
+                404
+            );
+        }
     }
 }

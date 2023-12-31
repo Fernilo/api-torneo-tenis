@@ -33,10 +33,10 @@ class TournamentController extends Controller
     {
         try{
             $tournament = Tournament::create($request->all());
-            //Ver de ponerlo en el modelo de matches
+          
             TournamentCreated::dispatch($tournament);
             return response()->json(
-                ["message" => "Success! The tournament was registered."],
+                ["message" => "Success! The tournament was registered with matches."],
                 201
             );
         }catch(Exception $e){

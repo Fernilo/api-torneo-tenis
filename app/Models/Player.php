@@ -32,4 +32,9 @@ class Player extends Model
     {
         return $this->hasMany(Tournament::class , 'champion_id');
     }
+
+    public static function getRandomPlayerId()
+    {
+        return Player::inRandomOrder()->take(1)->pluck('id')->first();
+    }
 }
