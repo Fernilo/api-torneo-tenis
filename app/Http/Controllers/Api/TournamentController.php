@@ -7,9 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Matches;
 use App\Models\Player;
 use App\Models\Tournament;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Date;
 
 class TournamentController extends Controller
 {
@@ -55,18 +58,23 @@ class TournamentController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        try{
+            $tournament = Tournament::with(['matches' => function($query) {
+                $query->where('match_day' , '<=' , Carbon::now()->toDateString())
+                    ->where('resultado' , '!=' , null);
+            }, 'matches.player2','matches.player1','matches.winner'])
+            ->findOrFail($id);
+     
+            return response()->json(
+                $tournament,
+                201
+            );
+        }catch(Exception $e){
+            return response()->json(
+                ["message" => $e->getMessage()],
+                404
+            );
+        }
     }
 
     /**

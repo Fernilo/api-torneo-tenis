@@ -28,6 +28,6 @@ class Matches extends Model
 
     public function winner()
     {
-        return $this->belongsTo(Player::class,'winner_id');
+        return $this->belongsTo(Player::class,'player_win_id');
     }
 }
