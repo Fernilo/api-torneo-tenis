@@ -77,26 +77,21 @@ class TournamentController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function simulateTorunament(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        try{
+            $tournament = Tournament::create($request->all());
+          
+            // TournamentCreated::dispatch($tournament);
+            return response()->json(
+                ["message" => "Success! The tournament was registered with matches."],
+                201
+            );
+        }catch(Exception $e){
+            return response()->json(
+                ["message" => $e->getMessage()],
+                404
+            );
+        }
     }
 }

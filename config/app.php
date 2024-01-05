@@ -161,6 +161,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        //Libreria para generar PDF
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         /*
          * Package Service Providers...

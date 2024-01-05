@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+Route::get('/players/pdf/{id}' , [PlayerController::class , 'pdf'])->name('players.pdf');
 Route::apiResource('players',PlayerController::class);
 Route::apiResource('tournaments',TournamentController::class);
 Route::apiResource('matches',MatchController::class);

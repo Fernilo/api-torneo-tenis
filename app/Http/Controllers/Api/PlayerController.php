@@ -8,7 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Player;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Barryvdh\DomPDF\PDF;
 
 class PlayerController extends Controller
 {
@@ -41,6 +44,28 @@ class PlayerController extends Controller
                 404
             );
         }
+    }
+
+    public function pdf($id) 
+    {
+        $players1 = Player::join('matches', function ($join) use($id){
+            $join->on('players.id', '=', 'matches.player_1_id')
+                 ->where('matches.tournament_id', '=', $id);
+        })
+        ->select('players.*');
+
+        $playersTotal = Player::join('matches', function ($join) use($id){
+            $join->on('players.id', '=', 'matches.player_2_id')
+                 ->where('matches.tournament_id', '=', $id);
+        })
+        ->union($players1)
+        ->select('players.*')
+        ->get();
+
+
+        $pdf = Pdf::loadView('pdf.invoice', $playersTotal);
+        //$pdf->loadHTML('<h1>Test</h1>');
+        return $pdf->stream();
     }
 
     /**
