@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+        <title>Players</title>
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ public_path('css/app.css') }}" type="text/css">
     </head>
     <body>
+        <h1 class="pdf-title">Players of {{$tournament->name}}</h1>
         <table>
             <thead>
                 <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Acciones</th>
+                <th scope="col">Name</th>
+                <th scope="col">Skill</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categorias as $categoria)
+                @foreach ($playersTotal as $player)
                     <tr>
-                        <th scope="row">{{$categoria->id}}</th>
-                        <td>{{$categoria->nombre}}</td>
+                        <th scope="row">{{$player->id}}</th>
+                        <td>{{$player->name}}</td>
+                        <td>{{$player->skill}}</td>
                     </tr>
                 @endforeach
             </tbody>

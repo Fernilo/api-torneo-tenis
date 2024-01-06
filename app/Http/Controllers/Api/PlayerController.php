@@ -6,12 +6,15 @@ use App\Events\DeletedPlayer;
 use App\Exceptions\PlayerNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Player;
+use App\Models\Tournament;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Barryvdh\DomPDF\PDF;
+use Dompdf\Dompdf;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
 
 class PlayerController extends Controller
 {
@@ -48,6 +51,8 @@ class PlayerController extends Controller
 
     public function pdf($id) 
     {
+        $tournament = Tournament::find($id);
+     
         $players1 = Player::join('matches', function ($join) use($id){
             $join->on('players.id', '=', 'matches.player_1_id')
                  ->where('matches.tournament_id', '=', $id);
@@ -62,10 +67,29 @@ class PlayerController extends Controller
         ->select('players.*')
         ->get();
 
+        $cacheKey = 'players.pdf';
+        $minutes = 3600; // Tiempo en minutos para almacenar en caché
 
-        $pdf = Pdf::loadView('pdf.invoice', $playersTotal);
-        //$pdf->loadHTML('<h1>Test</h1>');
-        return $pdf->stream();
+        // Intentar recuperar el PDF de la caché
+        $pdf = Cache::remember($cacheKey, $minutes, function () use($playersTotal,$tournament){
+            // Lógica para generar el PDF
+            $data = [
+                'playersTotal' => $playersTotal,
+                'tournament' => $tournament
+            ];
+            return PDF::loadView('players.pdf', $data)->output();
+        });
+
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Cache-Control', 'private, max-age=600, must-revalidate');
+
+
+        // $pdf = Pdf::loadView('players.pdf', ['playersTotal' => $playersTotal,'tournament' => $tournament]);
+  
+        // return $pdf->stream();
+
+        // return view('players.pdf',compact('playersTotal','tournament'));
     }
 
     /**
