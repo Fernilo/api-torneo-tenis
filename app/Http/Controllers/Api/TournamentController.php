@@ -77,10 +77,78 @@ class TournamentController extends Controller
         }
     }
 
-    public function simulateTorunament(Request $request)
+    public function simulateTournament(Request $request)
     {
         try{
+       
             $tournament = Tournament::create($request->all());
+            $players = Player::inRandomOrder()->pluck('id')->take($request->total_player)->toArray();
+            $matches = array_chunk($players,2);
+
+            $winIds = [];
+            foreach ($matches as $match) {
+                $matchEntity = new Matches();
+                    $matchEntity->fill([
+                    'player_1_id' => $match[0],
+                    'player_2_id' => $match[1],
+                    'tournament_id' => $tournament->id,
+                    'match_day' => now(),
+                    'player_win_id' => $match[1],
+                    //  Cambiar el name al campo por result o ver si es necesario
+                    'resultado' => '6-3 6-3'
+                ]);
+
+                $winIds [] = $matchEntity->player_win_id;
+        
+                $matchEntity->save();
+            }
+
+            $matches1 = array_chunk($winIds,2);
+          
+            $winIds1 = [];
+            foreach ($matches1 as $match1) {
+                $matchEntity = new Matches();
+                    $matchEntity->fill([
+                    'player_1_id' => $match1[0],
+                    'player_2_id' => $match1[1],
+                    'tournament_id' => $tournament->id,
+                    'match_day' => now(),
+                    'player_win_id' => $match1[1],
+                    //  Cambiar el name al campo por result o ver si es necesario
+                    'resultado' => '6-3 6-3'
+                ]);
+
+                $winIds1 [] = $matchEntity->player_win_id;
+        
+                $matchEntity->save();
+            }
+
+            dd($winIds1);
+            $idsArray = [];
+            $count = 1;
+            // do {
+            //     $idPlayer1 = Player::getRandomPlayerId();
+            //     $idPlayer2 = Player::getRandomPlayerId();
+            //     if($idPlayer1 != $idPlayer2 && !isset($idsArray[$idPlayer1]) && !isset($idsArray[$idPlayer2])) {
+            //         $match = new Matches();
+            //         $idsArray[] = $idPlayer1;
+            //         $idsArray[] = $idPlayer2;
+                    
+            //         $match->fill([
+            //             'player_1_id' => $idPlayer1,
+            //             'player_2_id' => $idPlayer2,
+            //             'tournament_id' => $tournament->id,
+            //             'match_day' => now()->addDay(),
+            //         ]);
+            
+            //         $match->save();
+            //         $count++;
+            //     }
+            // } while ($count <= ($tournament->total_player/2));
+            
+         
+
+
           
             // TournamentCreated::dispatch($tournament);
             return response()->json(

@@ -8,7 +8,8 @@
         <title>Players</title>
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ public_path('css/app.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ public_path('css/estilos.css') }}" type="text/css">
+
     </head>
     <body>
         <h1 class="pdf-title">Players of {{$tournament->name}}</h1>
