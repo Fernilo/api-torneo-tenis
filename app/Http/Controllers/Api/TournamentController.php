@@ -61,7 +61,7 @@ class TournamentController extends Controller
         try{
             $tournament = Tournament::with(['matches' => function($query) {
                 $query->where('match_day' , '<=' , Carbon::now()->toDateString())
-                    ->where('resultado' , '!=' , null);
+                    ->where('player_win_id' , '!=' , null);
             }, 'matches.player2','matches.player1','matches.winner'])
             ->findOrFail($id);
      
@@ -94,9 +94,7 @@ class TournamentController extends Controller
                         'player_2_id' => $match[1],
                         'tournament_id' => $tournament->id,
                         'match_day' => now(),
-                        'player_win_id' => $match[1],
-                        //  Cambiar el name al campo por result o ver si es necesario
-                        'resultado' => '6-3 6-3'
+                        'player_win_id' => $this->winnerPlayer($match , $tournament->type)
                     ]);
     
                     $winIds [] = $matchEntity->player_win_id;
@@ -108,6 +106,7 @@ class TournamentController extends Controller
             }
 
             if (count($matches) === 1) {
+                // En la final va a ser random
                 $player = Player::find($matches[0][rand(0, 1)]);
                 $tournament->champion_id = $player->id;
                 $tournament->save();
@@ -123,5 +122,26 @@ class TournamentController extends Controller
                 404
             );
         }
+    }
+
+    private function winnerPlayer(array $match , int $tournamentType)
+    {
+        $player1 = Player::find($match[0]);
+        $player2 = Player::find($match[1]);
+
+        //Aplicar un Enum
+        //Agregar comentarios a los campos con una migración
+        $value1 = $player1->skill + $player1->good_look;
+        $value2 = $player2->skill + $player2->good_look;
+        if($tournamentType === 1) {
+            $value1 = $value1 + $player1->travel_speed + $player1->strengh;
+            $value2 = $value2 + $player2->travel_speed + $player2->strengh;
+        } else {
+            $value1 = $value1 - $player1->reaction_time;
+            $value2 = $value2 - $player2->reaction_time;
+        }
+
+        return ($value1 > $value2)? $player1->id : $player2->id;
+     
     }
 }
