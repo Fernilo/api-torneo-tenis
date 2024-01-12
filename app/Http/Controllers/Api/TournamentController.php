@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\TournamentTypeEnum;
 use App\Events\TournamentCreated;
 use App\Http\Controllers\Controller;
 use App\Models\Matches;
@@ -106,6 +107,16 @@ class TournamentController extends Controller
             }
 
             if (count($matches) === 1) {
+                $matchEntity = new Matches();
+                    $matchEntity->fill([
+                    'player_1_id' => $matches[0][0],
+                    'player_2_id' => $matches[0][1],
+                    'tournament_id' => $tournament->id,
+                    'match_day' => now(),
+                    'player_win_id' => $this->winnerPlayer($matches[0] , $tournament->type)
+                ]);
+    
+                $matchEntity->save();
                 // En la final va a ser random
                 $player = Player::find($matches[0][rand(0, 1)]);
                 $tournament->champion_id = $player->id;
@@ -128,12 +139,10 @@ class TournamentController extends Controller
     {
         $player1 = Player::find($match[0]);
         $player2 = Player::find($match[1]);
-
-        //Aplicar un Enum
-        //Agregar comentarios a los campos con una migración
+       
         $value1 = $player1->skill + $player1->good_look;
         $value2 = $player2->skill + $player2->good_look;
-        if($tournamentType === 1) {
+        if($tournamentType === TournamentTypeEnum::MALE) {
             $value1 = $value1 + $player1->travel_speed + $player1->strengh;
             $value2 = $value2 + $player2->travel_speed + $player2->strengh;
         } else {
