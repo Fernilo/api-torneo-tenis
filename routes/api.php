@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\PlayerController;
 use App\Http\Controllers\Api\TournamentController;
+use App\Http\Controllers\WeatherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,3 +30,4 @@ Route::post('tournaments/simulateTournament' , [TournamentController::class , 's
 Route::apiResource('players',PlayerController::class);
 Route::apiResource('tournaments',TournamentController::class);
 Route::apiResource('matches',MatchController::class);
+Route::get('/weather', [WeatherController::class, 'getWeather']);

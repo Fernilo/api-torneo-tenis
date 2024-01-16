@@ -11,9 +11,6 @@ use App\Models\Tournament;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Date;
 
 class TournamentController extends Controller
 {
@@ -81,8 +78,12 @@ class TournamentController extends Controller
     public function simulateTournament(Request $request)
     {
         try{
+            if($request->total_player % 2 != 0) {
+                throw new Exception("La cantidad de jugadores debe ser par");
+            }
+
             $tournament = Tournament::create($request->all());
-            $players = Player::inRandomOrder()->pluck('id')->take($request->total_player)->toArray();
+            $players = Player::inRandomOrder()->where('type','=',$request->type)->pluck('id')->take($request->total_player)->toArray();
             $matches = array_chunk($players,2);
         
             while(count($matches) > 1) {
@@ -107,18 +108,20 @@ class TournamentController extends Controller
             }
 
             if (count($matches) === 1) {
+                // En la final va a ser random
+                $player = Player::find($matches[0][rand(0, 1)]);
+
                 $matchEntity = new Matches();
                     $matchEntity->fill([
                     'player_1_id' => $matches[0][0],
                     'player_2_id' => $matches[0][1],
                     'tournament_id' => $tournament->id,
                     'match_day' => now(),
-                    'player_win_id' => $this->winnerPlayer($matches[0] , $tournament->type)
+                    'player_win_id' => $player->id
                 ]);
     
                 $matchEntity->save();
-                // En la final va a ser random
-                $player = Player::find($matches[0][rand(0, 1)]);
+   
                 $tournament->champion_id = $player->id;
                 $tournament->save();
             }
