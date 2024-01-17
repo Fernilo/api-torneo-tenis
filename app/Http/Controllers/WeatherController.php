@@ -11,8 +11,8 @@ class WeatherController extends Controller
     public function getWeather()
     {
         $city = 'Buenos Aires';
-        //Configurar donde va este token
-        $apiKey = '3c6a4442e3659ded1d6e876419f1e252';
+     
+        $apiKey = config('services.openweather.api_key');
         $date = date('Y-m-d');
 
         $apiUrl = "http://api.openweathermap.org/data/2.5/weather?q={$city}&date={$date}&appid={$apiKey}&units=metric";
