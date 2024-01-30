@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Player extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes,LogsActivity;
 
     protected $guarded = ['id' , 'created_at' , 'updated_at'];
 

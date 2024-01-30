@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MatchController;
 use App\Http\Controllers\Api\PlayerController;
 use App\Http\Controllers\Api\TournamentController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\WeatherController;
+use App\Http\Controllers\Api\WeatherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('tournaments',TournamentController::class);
     Route::apiResource('matches',MatchController::class);
     Route::get('/weather', [WeatherController::class, 'getWeather']);
+    Route::get('/logs',[LogController::class , 'index']);
 
 
 });

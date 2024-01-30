@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class WeatherController extends Controller
 {
@@ -20,6 +23,7 @@ class WeatherController extends Controller
         $response = Http::get($apiUrl);
         $data = $response->json();
 
+        activity()->causedBy(Auth::user())->withProperties(['from' => 'foreign api'])->log('weather');
         return response()->json($data);
     }
 }

@@ -29,10 +29,10 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        activity()->causedBy(Auth::user())->withProperties(['from' => 'foreign api'])->log('login');
 
         return $this->respondWithToken($token);
     }
@@ -44,6 +44,7 @@ class AuthController extends Controller
      */
     public function me()
     {
+        activity()->causedBy(Auth::user())->withProperties(['from' => 'foreign api'])->log('me');
         return response()->json(auth()->user());
     }
 
@@ -56,6 +57,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
+        activity()->causedBy(Auth::user())->withProperties(['from' => 'foreign api'])->log('logout');
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -103,6 +105,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        activity()->causedBy(Auth::user())->withProperties(['from' => 'foreign api'])->log('register');
         return response()->json([
             'message' => 'Successfully create user',
             'user' => $user
