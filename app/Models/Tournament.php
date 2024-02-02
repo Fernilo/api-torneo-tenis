@@ -19,6 +19,6 @@ class Tournament extends Model
 
     public function player()
     {
-        return $this->belongsTo(Player::class);
+        return $this->belongsTo(Player::class,'champion_id');
     }
 }
