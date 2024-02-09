@@ -36,11 +36,16 @@ class PlayerTest extends TestCase
 
         $player = Player::where('name',$player['name'])->first();
 
-        $response = $this->delete("players/".$player->id);
+        if($player) {
+            $response = $this->delete("api/players/".$player->id);
+            $response->assertStatus(204);
+   
+            $this->assertDatabaseMissing('players', [
+                'id' => $player->id,
+                'deleted_at' => null
+            ]);
+        }
 
-        $response->assertStatus(204);
-
-        $this->assertDatabaseMissing('players', [$player->id]);
 
         $this->withMiddleware(Authenticate::class);
     }

@@ -155,7 +155,7 @@ class PlayerController extends Controller
           
             return response()->json(
                 ['message' => 'Success! The player was deleted and replaced with another.'],
-                200
+                204
             );
         }catch(Exception $e){
             return response()->json(
