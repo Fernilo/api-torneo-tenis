@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Matches;
 use App\Models\Player;
 use App\Models\Tournament;
+use App\Service\WinnerPlayerService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
@@ -76,18 +77,19 @@ class TournamentController extends Controller
             $tournament = Tournament::create($request->all());
             $players = Player::inRandomOrder()->where('type','=',$request->type)->pluck('id')->take($request->total_player)->toArray();
             $matches = array_chunk($players,2);
-        
+       
             while(count($matches) > 1) {
                 $winIds = [];
         
                 foreach ($matches as $match) {
                     $matchEntity = new Matches();
-                        $matchEntity->fill([
+               
+                    $matchEntity->fill([
                         'player_1_id' => $match[0],
                         'player_2_id' => $match[1],
                         'tournament_id' => $tournament->id,
                         'match_day' => now(),
-                        'player_win_id' => $this->winnerPlayer($match , $tournament->type)
+                        'player_win_id' => (new WinnerPlayerService)->winnerPlayer($match , $tournament->type)
                     ]);
     
                     $winIds [] = $matchEntity->player_win_id;
@@ -127,24 +129,5 @@ class TournamentController extends Controller
                 404
             );
         }
-    }
-
-    private function winnerPlayer(array $match , int $tournamentType)
-    {
-        $player1 = Player::find($match[0]);
-        $player2 = Player::find($match[1]);
-       
-        $value1 = $player1->skill + $player1->good_look;
-        $value2 = $player2->skill + $player2->good_look;
-        if($tournamentType === TournamentTypeEnum::MALE) {
-            $value1 = $value1 + $player1->travel_speed + $player1->strengh;
-            $value2 = $value2 + $player2->travel_speed + $player2->strengh;
-        } else {
-            $value1 = $value1 - $player1->reaction_time;
-            $value2 = $value2 - $player2->reaction_time;
-        }
-
-        return ($value1 > $value2)? $player1->id : $player2->id;
-     
     }
 }

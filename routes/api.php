@@ -28,8 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group(function () {
     Route::get('/players/pdf/{id}' , [PlayerController::class , 'pdf'])
         ->name('players.pdf');
-    Route::post('tournaments/simulateTournament' , [TournamentController::class , 'simulateTournament'])
-        ->name('tournaments.simulate');
+    Route::post('tournaments/simulateTournament' , [TournamentController::class , 'simulateTournament']);
 
     Route::apiResource('players',PlayerController::class);
     Route::apiResource('tournaments',TournamentController::class);

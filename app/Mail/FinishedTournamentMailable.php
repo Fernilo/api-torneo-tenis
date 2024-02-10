@@ -30,7 +30,7 @@ class FinishedTournamentMailable extends Mailable
     public function build()
     {
         return $this
-            ->subject('Torneos Finalizado')
+            ->subject('Torneo Finalizado')
             ->view('emails.finished_tournament');
     }
 }
