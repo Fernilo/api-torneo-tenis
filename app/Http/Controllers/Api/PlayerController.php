@@ -9,10 +9,7 @@ use App\Models\Player;
 use App\Models\Tournament;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Dompdf\Dompdf;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Cache;
 
