@@ -21,11 +21,56 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
+        
     /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    *  User Login
+    *  @OA\Post (
+    *     path="/api/auth/login",
+    *     description="Login user",
+    *     tags={"Login"},
+    *     @OA\RequestBody(
+    *         @OA\MediaType(
+    *             mediaType="application/json",
+    *             @OA\Schema(
+    *                 @OA\Property(
+    *                     property="email",
+    *                     type="string"
+    *                 ),
+    *                 @OA\Property(
+    *                     property="password",
+    *                     type="string"
+    *                 ),
+    *                 example={"email": "fernando@mail.com", "password": "123456"}
+    *             )
+    *         )
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="OK",
+    *         @OA\JsonContent(
+    *             @OA\Property(property="access_token", type="string", 
+    *               example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F"),
+    *             @OA\Property(property="token_type", type="string", example="bearer"),
+    *             @OA\Property(property="expires_in", type="string", example="3600")
+    *         )
+    *     ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="NOT FOUND",
+    *          @OA\JsonContent(
+    *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\User] #id"),
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=401,
+    *          description="Unauthorized",
+    *          @OA\JsonContent(
+    *              @OA\Property(property="message", type="string", example="Unauthorized"),
+    *          )
+    * 
+    *     )
+    * )
+    */
     public function login()
     {
         $credentials = request(['email', 'password']);

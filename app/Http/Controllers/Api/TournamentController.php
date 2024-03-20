@@ -44,7 +44,8 @@ class TournamentController extends Controller
      * Show data about Tournament
      * @OA\Get (
      *     path="/api/tournaments/{id}",
-     *     tags={"Tournament"},
+     *     tags={"Tournament show"},
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         in="path",
      *         name="id",
@@ -68,7 +69,7 @@ class TournamentController extends Controller
      *          response=404,
      *          description="NOT FOUND",
      *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Cliente] #id"),
+     *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Tournaments] #id"),
      *          )
      *      )
      * )
