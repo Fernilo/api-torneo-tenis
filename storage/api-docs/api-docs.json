@@ -12,10 +12,104 @@
         }
     ],
     "paths": {
+        "/api/players/": {
+            "get": {
+                "tags": [
+                    "Players Module"
+                ],
+                "summary": "Display a list of players",
+                "operationId": "68c4fbedd15c5234718da3e83284e9cc",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Dewayne Wilderman"
+                                            },
+                                            "skill": {
+                                                "type": "integer",
+                                                "example": 35
+                                            },
+                                            "good_look": {
+                                                "type": "integer",
+                                                "example": 27
+                                            },
+                                            "travel_speed": {
+                                                "type": "integer",
+                                                "nullable": true
+                                            },
+                                            "reaction_time": {
+                                                "type": "integer",
+                                                "nullable": true
+                                            },
+                                            "strengh": {
+                                                "type": "integer",
+                                                "nullable": true
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-03-13T13:53:56.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2024-03-13T13:53:56.000000Z"
+                                            },
+                                            "deleted_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\\\Models\\\\Players] #id"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/tournaments/{id}": {
             "get": {
                 "tags": [
-                    "Tournament show"
+                    "Tournaments Module"
                 ],
                 "summary": "Show data about Tournament",
                 "operationId": "ffc2afa5f4779c270ca63856cdc2b2a3",
@@ -94,10 +188,140 @@
                 ]
             }
         },
+        "/api/tournaments/simulateTournament/": {
+            "post": {
+                "tags": [
+                    "Tournaments Module"
+                ],
+                "summary": "Simulate Tournament",
+                "description": "Simulate Tournament, return the champion player data",
+                "operationId": "95463a7562e815ca27ebb2eee3428f2c",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "total_player": {
+                                        "type": "number"
+                                    },
+                                    "type": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Roland Garros",
+                                    "total_player": "32",
+                                    "type": "1"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "number",
+                                            "example": "1"
+                                        },
+                                        "name": {
+                                            "type": "number",
+                                            "example": "Fabric Smithers"
+                                        },
+                                        "skill": {
+                                            "type": "number",
+                                            "example": "296"
+                                        },
+                                        "good_look": {
+                                            "type": "number",
+                                            "example": "65"
+                                        },
+                                        "travel_speed": {
+                                            "type": "number",
+                                            "example": "65"
+                                        },
+                                        "reaction_time": {
+                                            "type": "number",
+                                            "example": "null"
+                                        },
+                                        "strengh": {
+                                            "type": "number",
+                                            "example": "51"
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "2"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "example": "22023-02-23T00:09:16.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "example": "22023-02-23T00:09:16.000000Z"
+                                        },
+                                        "deleted_at": {
+                                            "type": "string",
+                                            "example": "null"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\\\Models\\\\Tournament]"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/login": {
             "post": {
                 "tags": [
-                    "Login"
+                    "Auth Module"
                 ],
                 "summary": "User Login",
                 "description": "Login user",
@@ -138,9 +362,9 @@
                                             "type": "string",
                                             "example": "bearer"
                                         },
-                                        "access_type": {
+                                        "expires_in": {
                                             "type": "string",
-                                            "example": "3600"
+                                            "example": 3600
                                         }
                                     },
                                     "type": "object"

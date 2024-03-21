@@ -44,7 +44,7 @@ class TournamentController extends Controller
      * Show data about Tournament
      * @OA\Get (
      *     path="/api/tournaments/{id}",
-     *     tags={"Tournament show"},
+     *     tags={"Tournaments Module"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         in="path",
@@ -73,7 +73,7 @@ class TournamentController extends Controller
      *          )
      *      )
      * )
-     */
+    */
     public function show($id)
     {
         try{
@@ -85,7 +85,7 @@ class TournamentController extends Controller
      
             return response()->json(
                 $tournament,
-                201
+                200
             );
         }catch(Exception $e){
             return response()->json(
@@ -95,6 +95,66 @@ class TournamentController extends Controller
         }
     }
 
+    /**
+     * Simulate Tournament
+     * @OA\Post (
+     *     path="/api/tournaments/simulateTournament/",
+     *     description="Simulate Tournament, return the champion player data",
+     *     tags={"Tournaments Module"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="total_player",
+     *                     type="number"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="type",
+     *                     type="number"
+     *                 ),
+     *                 example={"name": "Roland Garros", "total_player": "32", "type"="1"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="number", example="1"),
+     *             @OA\Property(property="name", type="number", example="Fabric Smithers"),
+     *             @OA\Property(property="skill", type="number", example="296"),
+     *             @OA\Property(property="good_look", type="number", example="65"),
+     *             @OA\Property(property="travel_speed", type="number", example="65"),
+     *             @OA\Property(property="reaction_time", type="number", example="null"),
+     *             @OA\Property(property="strengh", type="number", example="51"),
+     *             @OA\Property(property="type", type="string", example="2"),
+     *             @OA\Property(property="created_at", type="string", example="22023-02-23T00:09:16.000000Z"),
+     *             @OA\Property(property="updated_at", type="string", example="22023-02-23T00:09:16.000000Z"),
+     *             @OA\Property(property="deleted_at", type="string", example="null")
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="NOT FOUND",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Tournament]"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthorized",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Unauthorized"),
+     *          )
+     *     )
+     *  )
+    */
     public function simulateTournament(Request $request)
     {
         try{

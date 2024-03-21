@@ -16,10 +16,39 @@ use Illuminate\Support\Facades\Cache;
 class PlayerController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     * Display a list of players
+     * @OA\Get (
+     *     path="/api/players/",
+     *     tags={"Players Module"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(type="array",
+     *               @OA\Items(type="object",
+     *                      @OA\Property(property="id", type="integer", example=1),
+     *                      @OA\Property(property="name", type="string", example="Dewayne Wilderman"),
+     *                      @OA\Property(property="skill", type="integer", example=35),
+     *                      @OA\Property(property="good_look", type="integer", example=27),
+     *                      @OA\Property(property="travel_speed", type="integer", nullable=true),
+     *                      @OA\Property(property="reaction_time", type="integer", nullable=true),
+     *                      @OA\Property(property="strengh", type="integer", nullable=true),
+     *                      @OA\Property(property="type", type="string", example="1"),
+     *                      @OA\Property(property="created_at", type="string", format="date-time", example="2024-03-13T13:53:56.000000Z"),
+     *                      @OA\Property(property="updated_at", type="string", format="date-time", example="2024-03-13T13:53:56.000000Z"),
+     *                      @OA\Property(property="deleted_at", type="string", format="date-time", nullable=true),
+     *               ),
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="NOT FOUND",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Players]"),
+     *          )
+     *      )
+     * )
+    */
     public function index()
     {
         try{

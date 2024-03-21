@@ -27,7 +27,7 @@ class AuthController extends Controller
     *  @OA\Post (
     *     path="/api/auth/login",
     *     description="Login user",
-    *     tags={"Login"},
+    *     tags={"Auth Module"},
     *     @OA\RequestBody(
     *         @OA\MediaType(
     *             mediaType="application/json",
@@ -51,7 +51,7 @@ class AuthController extends Controller
     *             @OA\Property(property="access_token", type="string", 
     *               example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F"),
     *             @OA\Property(property="token_type", type="string", example="bearer"),
-    *             @OA\Property(property="expires_in", type="string", example="3600")
+    *             @OA\Property(property="expires_in", type="string", example=3600)
     *         )
     *     ),
     *      @OA\Response(
