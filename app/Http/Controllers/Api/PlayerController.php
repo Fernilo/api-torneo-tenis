@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Cache;
 class PlayerController extends Controller
 {
     /**
-     * Display a list of players
+     * List of players
      * @OA\Get (
      *     path="/api/players/",
      *     tags={"Players Module"},
@@ -30,13 +30,13 @@ class PlayerController extends Controller
      *                      @OA\Property(property="name", type="string", example="Dewayne Wilderman"),
      *                      @OA\Property(property="skill", type="integer", example=35),
      *                      @OA\Property(property="good_look", type="integer", example=27),
-     *                      @OA\Property(property="travel_speed", type="integer", nullable=true),
-     *                      @OA\Property(property="reaction_time", type="integer", nullable=true),
+     *                      @OA\Property(property="travel_speed", type="integer", nullable=true, example=null),
+     *                      @OA\Property(property="reaction_time", type="integer", nullable=true, example=null),
      *                      @OA\Property(property="strengh", type="integer", nullable=true),
      *                      @OA\Property(property="type", type="string", example="1"),
      *                      @OA\Property(property="created_at", type="string", format="date-time", example="2024-03-13T13:53:56.000000Z"),
      *                      @OA\Property(property="updated_at", type="string", format="date-time", example="2024-03-13T13:53:56.000000Z"),
-     *                      @OA\Property(property="deleted_at", type="string", format="date-time", nullable=true),
+     *                      @OA\Property(property="deleted_at", type="string", format="date-time", nullable=true, example=null),
      *               ),
      *         )
      *     ),

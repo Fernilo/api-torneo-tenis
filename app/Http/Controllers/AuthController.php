@@ -34,10 +34,13 @@ class AuthController extends Controller
     *             @OA\Schema(
     *                 @OA\Property(
     *                     property="email",
+    *                     format="email",
     *                     type="string"
     *                 ),
     *                 @OA\Property(
     *                     property="password",
+    *                     format="password",
+    *                     minLength=6,
     *                     type="string"
     *                 ),
     *                 example={"email": "fernando@mail.com", "password": "123456"}
@@ -54,13 +57,6 @@ class AuthController extends Controller
     *             @OA\Property(property="expires_in", type="string", example=3600)
     *         )
     *     ),
-    *      @OA\Response(
-    *          response=404,
-    *          description="NOT FOUND",
-    *          @OA\JsonContent(
-    *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\User] #id"),
-    *          )
-    *      ),
     *      @OA\Response(
     *          response=401,
     *          description="Unauthorized",

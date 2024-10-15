@@ -11,12 +11,12 @@ use Illuminate\Routing\Controller as BaseController;
  *  @OA\Info(
  *     version="v1.9.0",
  *     title="Tennis tournament → API-REST Documentation",
- *     description="**API-REST:** Admin for tennis tournament",
+ *     description="**API-REST:** For tennis tournament",
  * ),
  *
  *
  * @OA\Server(
- *     url="http://localhost:8000",
+ *     url="http://localhost:80",
  *     description="Local Server"
  * ),
  *
