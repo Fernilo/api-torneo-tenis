@@ -36,9 +36,10 @@ class FinishedTournamentEmail implements ShouldQueue
     public function handle()
     {
         try {
-            $finishedTournaments = (new FinishedTournamentService)->getFinishedTournament();
-            $adminEmails = (new FinishedTournamentService)->getAdminEmails();
-    
+            $finishedTournamentsService = new FinishedTournamentService();
+            $finishedTournaments = $finishedTournamentsService->getFinishedTournament();
+            $adminEmails = $finishedTournamentsService->getAdminEmails();
+ 
             if(count($finishedTournaments) > 0 && count($adminEmails) > 0) {
                 $finishedTournaments->each(function ($tournament) use($adminEmails){
                         $email = new FinishedTournamentMailable($tournament);

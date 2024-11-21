@@ -156,20 +156,27 @@ class TournamentController extends Controller
      *  )
     */
     public function simulateTournament(Request $request)
-    {
+    { //TODO: Ver de descetralizar este metodo
         try{
             if($request->total_player % 2 != 0) {
                 throw new Exception("La cantidad de jugadores debe ser par");
             }
 
             $tournament = Tournament::create($request->all());
-            $players = Player::inRandomOrder()->where('type','=',$request->type)->pluck('id')->take($request->total_player)->toArray();
+            $players = Player::inRandomOrder()
+                ->where('type','=',$request->type)
+                ->pluck('id')
+                ->take($request->total_player)
+                ->toArray();
             $matches = array_chunk($players,2);
-       
+      
             while(count($matches) > 1) {
                 $winIds = [];
-        
                 foreach ($matches as $match) {
+                    if (count($match) !== 2) {
+                        throw new Exception("Error en la distribución de partidos: jugador sin rival");
+                    }
+
                     $matchEntity = new Matches();
                
                     $matchEntity->fill([
@@ -188,7 +195,7 @@ class TournamentController extends Controller
                 $matches = array_chunk($winIds,2);
             }
 
-            if (count($matches) === 1) {
+            if (count($matches) === 1 && count($matches[0]) === 2) {
                 // En la final va a ser random
                 $player = Player::find($matches[0][rand(0, 1)]);
 
