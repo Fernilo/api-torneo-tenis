@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Mail\FinishedTournamentMailable;
-use App\Models\Tournament;
 use App\Service\FinishedTournamentService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -35,10 +34,22 @@ class FinishedTournamentEmail implements ShouldQueue
      */
     public function handle()
     {
+        Log::info('Iniciando FinishedTournamentEmail job', [
+            'job_id' => $this->job->getJobId(),
+            'attempt' => $this->attempts()
+        ]);
+
         try {
             $finishedTournamentsService = new FinishedTournamentService();
             $finishedTournaments = $finishedTournamentsService->getFinishedTournament();
+            Log::info('Torneos encontrados', [
+                'count' => $finishedTournaments->count()
+            ]);
+            
             $adminEmails = $finishedTournamentsService->getAdminEmails();
+            Log::info('Emails de admin encontrados', [
+                'count' => count($adminEmails)
+            ]);
  
             if(count($finishedTournaments) > 0 && count($adminEmails) > 0) {
                 $finishedTournaments->each(function ($tournament) use($adminEmails){
@@ -51,7 +62,11 @@ class FinishedTournamentEmail implements ShouldQueue
                 
             }
         } catch (\Throwable $th) {
-           Log::error('El mail no pudo ser enviado corectamente');
+            Log::error('Error en job', [
+                'error' => $th->getMessage(),
+                'line' => $th->getLine()
+            ]);
+            throw $th;
         }
     }
 }

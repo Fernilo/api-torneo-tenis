@@ -75,6 +75,7 @@ class PlayerController extends Controller
         }
     }
 
+    // Ver de implementar queue jobs para generar el pdf
     public function pdf($id) 
     {
         $tournament = Tournament::find($id);
